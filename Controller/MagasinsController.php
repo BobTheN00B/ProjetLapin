@@ -28,10 +28,8 @@ class MagasinsController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nom     = trim($_POST['nom'] ?? '');
             $adresse = trim($_POST['adresse'] ?? '');
-            $ville   = trim($_POST['ville'] ?? '');
-            $contact = trim($_POST['contact'] ?? '');
             if ($nom) {
-                $this->model->create($nom, $adresse, $ville, $contact);
+                $this->model->create($nom, $adresse);
                 header('Location: index.php?page=magasins&success=1');
                 exit;
             }
@@ -51,10 +49,8 @@ class MagasinsController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nom     = trim($_POST['nom'] ?? '');
             $adresse = trim($_POST['adresse'] ?? '');
-            $ville   = trim($_POST['ville'] ?? '');
-            $contact = trim($_POST['contact'] ?? '');
             if ($nom) {
-                $this->model->update($id, $nom, $adresse, $ville, $contact);
+                $this->model->update($id, $nom, $adresse);
                 header('Location: index.php?page=magasins&success=1');
                 exit;
             }

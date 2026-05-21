@@ -22,17 +22,17 @@ class ZoneModel
         return $stmt->fetch() ?: null;
     }
  
-    public function create(string $nom, string $ville): int
+    public function create(string $nom, string $adresse): int
     {
-        $stmt = $this->db->prepare('INSERT INTO Zone (Nom, Ville) VALUES (?, ?)');
-        $stmt->execute([$nom, $ville]);
+        $stmt = $this->db->prepare('INSERT INTO Zone (Nom, Adresse) VALUES (?, ?)');
+        $stmt->execute([$nom, $adresse]);
         return (int)$this->db->lastInsertId();
     }
  
-    public function update(int $id, string $nom, string $ville): bool
+    public function update(int $id, string $nom, string $adresse): bool
     {
-        $stmt = $this->db->prepare('UPDATE Zone SET Nom=?, Ville=? WHERE Id_Zone=?');
-        return $stmt->execute([$nom, $ville, $id]);
+        $stmt = $this->db->prepare('UPDATE Zone SET Nom=?, Adresse=? WHERE Id_Zone=?');
+        return $stmt->execute([$nom, $adresse, $id]);
     }
  
     public function delete(int $id): bool

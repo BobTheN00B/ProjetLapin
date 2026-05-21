@@ -30,9 +30,9 @@ class ZoneController
         $error = null;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nom   = trim($_POST['nom'] ?? '');
-            $ville = trim($_POST['ville'] ?? '');
+            $ville = trim($_POST['adresse'] ?? '');
             if ($nom) {
-                $this->model->create($nom, $ville);
+                $this->model->create($nom, $adresse);
                 header('Location: index.php?page=zones&success=1');
                 exit;
             }
@@ -51,9 +51,9 @@ class ZoneController
         $error = null;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nom   = trim($_POST['nom'] ?? '');
-            $ville = trim($_POST['ville'] ?? '');
+            $ville = trim($_POST['adresse'] ?? '');
             if ($nom) {
-                $this->model->update($id, $nom, $ville);
+                $this->model->update($id, $nom, $adresse);
                 header('Location: index.php?page=zones&success=1');
                 exit;
             }

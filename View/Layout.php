@@ -4,6 +4,7 @@
 function layoutStart(string $pageTitle, string $activeMenu = ''): void {
     $user = $_SESSION['user'] ?? null;
 ?>
+<div class = "Layout">
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -47,6 +48,7 @@ function layoutEnd(): void {
 <footer style="text-align:center;padding:2rem;color:#aaa;font-size:.8rem;">
   🐰 Lapin de Pâques – Hackathon BTS SIO – Lycée Fulbert
 </footer>
+</div>
 </body>
 </html>
 <?php

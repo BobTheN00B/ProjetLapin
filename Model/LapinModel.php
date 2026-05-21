@@ -32,21 +32,21 @@ class LapinModel
         return $stmt->fetch() ?: null;
     }
 
-    public function create(string $nom, string $couleur, string $statut, int $idUtilisateur): int
+    public function create(string $nom, int $idUtilisateur): int
     {
         $stmt = $this->db->prepare(
-            'INSERT INTO Lapins (Nom, Couleur, Statut, Id_Utilisateurs) VALUES (?, ?, ?, ?)'
+            'INSERT INTO Lapins (Nom, Id_Utilisateurs) VALUES (?, ?)'
         );
-        $stmt->execute([$nom, $couleur, $statut, $idUtilisateur]);
+        $stmt->execute([$nom, $idUtilisateur]);
         return (int)$this->db->lastInsertId();
     }
 
-    public function update(int $id, string $nom, string $couleur, string $statut): bool
+    public function update(int $id, string $nom): bool
     {
         $stmt = $this->db->prepare(
-            'UPDATE Lapins SET Nom=?, Couleur=?, Statut=? WHERE Id_Lapins=?'
+            'UPDATE Lapins SET Nom=? WHERE Id_Lapins=?'
         );
-        return $stmt->execute([$nom, $couleur, $statut, $id]);
+        return $stmt->execute([$nom, $id]);
     }
 
     public function delete(int $id): bool
@@ -86,7 +86,7 @@ class LapinModel
     public function getNbLivraisons(int $id): int
     {
         $stmt = $this->db->prepare(
-            "SELECT COUNT(*) FROM Livraisons WHERE Id_Lapins=? AND Statut='livrée'"
+            "SELECT COUNT(*) FROM Livraisons WHERE Id_Lapins=? AND Statut='livré'"
         );
         $stmt->execute([$id]);
         return (int)$stmt->fetchColumn();
