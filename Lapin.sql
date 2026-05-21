@@ -1,90 +1,131 @@
 use Lapin;
-/*CREATE TABLE Magasins(
-   Id_Magasins INT,
-   nom VARCHAR(50),
-   adresse VARCHAR(50),
-   PRIMARY KEY(Id_Magasins)
-);
-
-CREATE TABLE lapins(
-   Id_lapins INT,
-   Nom VARCHAR(50),
-   PRIMARY KEY(Id_lapins)
-);
-
-CREATE TABLE zone(
-   Id_zone INT,
+/*CREATE TABLE Zone(
+   Id_Zone INT,
    Nom VARCHAR(50),
    Adresse VARCHAR(50),
-   PRIMARY KEY(Id_zone)
+   PRIMARY KEY(Id_Zone)
 );
 
-CREATE TABLE jardins(
-   id_jardin INT,
-   nom VARCHAR(50),
-   Id_zone INT NOT NULL,
-   PRIMARY KEY(id_jardin),
-   FOREIGN KEY(Id_zone) REFERENCES zone(Id_zone)
+CREATE TABLE Jardins(
+   Id_Jardin INT,
+   Nom VARCHAR(50),
+   Adresse VARCHAR(50),
+   Id_Zone INT NOT NULL,
+   PRIMARY KEY(Id_Jardin),
+   FOREIGN KEY(Id_Zone) REFERENCES Zone(Id_Zone)
 );
 
-CREATE TABLE collecte(
-   id_collecte INT,
-   date_collecte DATE,
-   quantite_collecte INT,
-   PRIMARY KEY(id_collecte)
+CREATE TABLE Collecte(
+   Id_Collecte INT,
+   dateCollecte DATE,
+   datePrevisionnelle DATE,
+   PRIMARY KEY(Id_Collecte)
 );
 
-CREATE TABLE livraisons(
-   id_livraison INT,
-   date_livraison DATE,
-   quantite_livraison INT,
-   Id_zone INT NOT NULL,
-   PRIMARY KEY(id_livraison),
-   FOREIGN KEY(Id_zone) REFERENCES zone(Id_zone)
+CREATE TABLE Chocolat(
+   Id_Chocolat INT,
+   typeChocolat VARCHAR(50),
+   PRIMARY KEY(Id_Chocolat)
 );
 
-CREATE TABLE chocolat(
-   id_chocolat INT,
-   type_chocolat VARCHAR(50),
-   PRIMARY KEY(id_chocolat)
+CREATE TABLE Utilisateurs(
+   Id_Utilisateurs INT,
+   Nom VARCHAR(50),
+   MDP VARCHAR(50),
+   Params JSON,
+   PRIMARY KEY(Id_Utilisateurs)
 );
 
-CREATE TABLE Asso_7(
+CREATE TABLE Log(
+   Id_Log INT,
+   Date_Heure DATETIME,
+   PRIMARY KEY(Id_Log)
+);
+
+CREATE TABLE Magasins(
    Id_Magasins INT,
-   id_collecte INT,
-   PRIMARY KEY(Id_Magasins, id_collecte),
+   Nom VARCHAR(50),
+   Adresse VARCHAR(50),
+   Id_Utilisateurs INT NOT NULL,
+   PRIMARY KEY(Id_Magasins),
+   FOREIGN KEY(Id_Utilisateurs) REFERENCES Utilisateurs(Id_Utilisateurs)
+);
+
+CREATE TABLE Lapins(
+   Id_Lapins INT,
+   Nom VARCHAR(50),
+   Id_Utilisateurs INT NOT NULL,
+   PRIMARY KEY(Id_Lapins),
+   FOREIGN KEY(Id_Utilisateurs) REFERENCES Utilisateurs(Id_Utilisateurs)
+);
+
+CREATE TABLE Livraisons(
+   Id_Livraison INT,
+   dateLivraison DATE,
+   quantiteLivraison INT,
+   datePrevisionnelle DATE,
+   Id_Utilisateurs INT NOT NULL,
+   Id_Zone INT NOT NULL,
+   Id_Lapins INT NOT NULL,
+   PRIMARY KEY(Id_Livraison),
+   FOREIGN KEY(Id_Utilisateurs) REFERENCES Utilisateurs(Id_Utilisateurs),
+   FOREIGN KEY(Id_Zone) REFERENCES Zone(Id_Zone),
+   FOREIGN KEY(Id_Lapins) REFERENCES Lapins(Id_Lapins)
+);
+
+CREATE TABLE possede(
+   Id_Magasins INT,
+   Id_Collecte INT,
+   PRIMARY KEY(Id_Magasins, Id_Collecte),
    FOREIGN KEY(Id_Magasins) REFERENCES Magasins(Id_Magasins),
-   FOREIGN KEY(id_collecte) REFERENCES collecte(id_collecte)
+   FOREIGN KEY(Id_Collecte) REFERENCES Collecte(Id_Collecte)
 );
 
-CREATE TABLE Asso_8(
-   Id_lapins INT,
-   id_collecte INT,
-   PRIMARY KEY(Id_lapins, id_collecte),
-   FOREIGN KEY(Id_lapins) REFERENCES lapins(Id_lapins),
-   FOREIGN KEY(id_collecte) REFERENCES collecte(id_collecte)
+CREATE TABLE effectue(
+   Id_Lapins INT,
+   Id_Collecte INT,
+   PRIMARY KEY(Id_Lapins, Id_Collecte),
+   FOREIGN KEY(Id_Lapins) REFERENCES Lapins(Id_Lapins),
+   FOREIGN KEY(Id_Collecte) REFERENCES Collecte(Id_Collecte)
 );
 
-CREATE TABLE Asso_9(
-   Id_lapins INT,
-   id_livraison INT,
-   PRIMARY KEY(Id_lapins, id_livraison),
-   FOREIGN KEY(Id_lapins) REFERENCES lapins(Id_lapins),
-   FOREIGN KEY(id_livraison) REFERENCES livraisons(id_livraison)
+CREATE TABLE concerne(
+   Id_Collecte INT,
+   Id_Chocolat INT,
+   PRIMARY KEY(Id_Collecte, Id_Chocolat),
+   FOREIGN KEY(Id_Collecte) REFERENCES Collecte(Id_Collecte),
+   FOREIGN KEY(Id_Chocolat) REFERENCES Chocolat(Id_Chocolat)
 );
 
-CREATE TABLE Asso_11(
-   id_collecte INT,
-   id_chocolat INT,
-   PRIMARY KEY(id_collecte, id_chocolat),
-   FOREIGN KEY(id_collecte) REFERENCES collecte(id_collecte),
-   FOREIGN KEY(id_chocolat) REFERENCES chocolat(id_chocolat)
+CREATE TABLE contient(
+   Id_Livraison INT,
+   Id_Chocolat INT,
+   Quantite INT,
+   PRIMARY KEY(Id_Livraison, Id_Chocolat),
+   FOREIGN KEY(Id_Livraison) REFERENCES Livraisons(Id_Livraison),
+   FOREIGN KEY(Id_Chocolat) REFERENCES Chocolat(Id_Chocolat)
 );
 
-CREATE TABLE Asso_12(
-   id_livraison INT,
-   id_chocolat INT,
-   PRIMARY KEY(id_livraison, id_chocolat),
-   FOREIGN KEY(id_livraison) REFERENCES livraisons(id_livraison),
-   FOREIGN KEY(id_chocolat) REFERENCES chocolat(id_chocolat)
+CREATE TABLE genere(
+   Id_Livraison INT,
+   Id_Log INT,
+   PRIMARY KEY(Id_Livraison, Id_Log),
+   FOREIGN KEY(Id_Livraison) REFERENCES Livraisons(Id_Livraison),
+   FOREIGN KEY(Id_Log) REFERENCES Log(Id_Log)
+);
+
+CREATE TABLE enregistre(
+   Id_Jardin INT,
+   Id_Log INT,
+   PRIMARY KEY(Id_Jardin, Id_Log),
+   FOREIGN KEY(Id_Jardin) REFERENCES Jardins(Id_Jardin),
+   FOREIGN KEY(Id_Log) REFERENCES Log(Id_Log)
+);
+
+CREATE TABLE affecte_a(
+   Id_Lapins INT,
+   Id_Jardin INT,
+   PRIMARY KEY(Id_Lapins, Id_Jardin),
+   FOREIGN KEY(Id_Lapins) REFERENCES Lapins(Id_Lapins),
+   FOREIGN KEY(Id_Jardin) REFERENCES Jardins(Id_Jardin)
 );*/
