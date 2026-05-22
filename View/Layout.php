@@ -22,7 +22,7 @@ function layoutStart(string $pageTitle, string $activeMenu = ''): void {
   <div class="nav-links">
     <a href="index.php?page=dashboard"  class="<?= $activeMenu==='dashboard'  ?'active':'' ?>">🏠 Accueil</a>
     <a href="index.php?page=lapins"     class="<?= $activeMenu==='lapins'     ?'active':'' ?>">🐰 Lapins</a>
-    <a href="index.php?page=magasins"   class="<?= $activeMenu==='magasins'   ?'active':'' ?>">🍫 Magasins</a>
+    <a href="index.php?page=magasins" class="<?= $activeMenu === 'magasins' ? 'active' : '' ?>">🍫 Magasins</a>
     <a href="index.php?page=zones"      class="<?= $activeMenu==='zones'      ?'active':'' ?>">🗺️ Zones</a>
     <a href="index.php?page=jardins"    class="<?= $activeMenu==='jardins'    ?'active':'' ?>">🌱 Jardins</a>
     <a href="index.php?page=collectes"  class="<?= $activeMenu==='collectes'  ?'active':'' ?>">🚚 Collectes</a>

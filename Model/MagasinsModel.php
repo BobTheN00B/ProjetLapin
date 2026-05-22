@@ -24,12 +24,12 @@ class MagasinsModel
         return $stmt->fetch() ?: null;
     }
 
-    public function create(string $nom, string $adresse): int
+    public function create(string $nom, string $adresse, int $idUtilisateur): int
     {
         $stmt = $this->db->prepare(
-            'INSERT INTO Magasins (Nom, Adresse) VALUES (?, ?)'
+            'INSERT INTO Magasins (Nom, Adresse, Id_Utilisateurs) VALUES (?, ?, ?)'
         );
-        $stmt->execute([$nom, $adresse]);
+        $stmt->execute([$nom, $adresse, $idUtilisateur]);
         return (int)$this->db->lastInsertId();
     }
 

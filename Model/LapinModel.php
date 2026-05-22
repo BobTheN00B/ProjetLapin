@@ -32,12 +32,12 @@ class LapinModel
         return $stmt->fetch() ?: null;
     }
 
-    public function create(string $nom, int $idUtilisateur): int
+    public function create(string $nom, string $couleur, string $statut, int $idUtilisateur): int
     {
         $stmt = $this->db->prepare(
-            'INSERT INTO Lapins (Nom, Id_Utilisateurs) VALUES (?, ?)'
+            'INSERT INTO Lapins (nom, couleur, statut, Id_Utilisateurs) VALUES (?, ?, ?, ?)'
         );
-        $stmt->execute([$nom, $idUtilisateur]);
+        $stmt->execute([$nom, $couleur, $statut, $idUtilisateur]);
         return (int)$this->db->lastInsertId();
     }
 

@@ -14,10 +14,10 @@ class LivraisonsModel
     {
         return $this->db->query(
             'SELECT lv.*, la.Nom AS NomLapin, j.Adresse AS AdresseJardin,
-                    j.Nom AS NomJardin, j.Ville AS VilleJardin, z.Nom AS NomZone
+                    j.Nom AS NomJardin, z.Nom AS NomZone
              FROM Livraisons lv
              JOIN Lapins la ON lv.Id_Lapins = la.Id_Lapins
-             JOIN Jardins j  ON lv.Id_Jardin = j.Id_Jardin
+             JOIN Jardins j  ON Id_Jardin = j.Id_Jardin
              JOIN Zone z     ON j.Id_Zone    = z.Id_Zone
              ORDER BY lv.datePrevisionnelle DESC'
         )->fetchAll();
@@ -38,13 +38,13 @@ class LivraisonsModel
         return $stmt->fetch() ?: null;
     }
 
-    public function create(string $datePrev, int $idLapin, int $idJardin): int
+    public function create(string $datePrev, int $idLapin, int $idZone, int $idUtilisateur): int
     {
         $stmt = $this->db->prepare(
-            'INSERT INTO Livraisons (datePrevisionnelle, Statut, Id_Lapins, Id_Jardin)
+            'INSERT INTO Livraisons (datePrevisionnelle, Statut, Id_Lapins, Id_Zone, Id_Utilisateurs)
              VALUES (?, "planifiée", ?, ?)'
         );
-        $stmt->execute([$datePrev, $idLapin, $idJardin]);
+        $stmt->execute([$datePrev, $idLapin, $idZone, $idUtilisateur]);
         return (int)$this->db->lastInsertId();
     }
 
@@ -100,7 +100,7 @@ class LivraisonsModel
     public function getLogs(int $limit = 100): array
     {
         $stmt = $this->db->prepare(
-            'SELECT * FROM Logs ORDER BY Date_Heure DESC LIMIT ?'
+            'SELECT * FROM Log ORDER BY Date_Heure DESC LIMIT ?'
         );
         $stmt->bindValue(1, $limit, PDO::PARAM_INT);
         $stmt->execute();
@@ -126,7 +126,7 @@ class LivraisonsModel
         return $this->db->query(
             "SELECT z.Nom AS Zone, COUNT(*) AS nb
              FROM Livraisons lv
-             JOIN Jardins j ON lv.Id_Jardin=j.Id_Jardin
+             JOIN Jardins j ON Id_Jardin=j.Id_Jardin
              JOIN Zone z    ON j.Id_Zone=z.Id_Zone
              WHERE lv.Statut='livrée'
              GROUP BY z.Nom

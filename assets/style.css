@@ -1,4 +1,4 @@
-root {
+:root {
   --pastel-pink:   #FFB3C6;
   --pastel-yellow: #FFF3B0;
   --pastel-green:  #B5EAD7;
@@ -144,7 +144,7 @@ input:focus, select:focus, textarea:focus {
 /* ── BUNNY ANIM ──────────────────────────────────────── */
 @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
 .bunny { display: inline-block; animation: bounce 1.5s ease-in-out infinite; }
-}
+
 .User {
     * { box-sizing: border-box; margin: 0; padding: 0; }
 body {

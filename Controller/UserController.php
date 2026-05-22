@@ -59,7 +59,7 @@ class UserController
             $error = 'Email ou mot de passe incorrect 🐰';
         }
 
-        require __DIR__ . '/../View/UserView.php';
+        require_once __DIR__ . '/../View/UserView.php';
         (new UserView())->showLogin($error);
     }
 
@@ -105,5 +105,28 @@ class UserController
         }
         header('Location: index.php?page=utilisateurs');
         exit;
+    }
+
+    public function handleRegister(): void
+    {
+        $error = null;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nom      = trim($_POST['nom'] ?? '');
+            $email    = trim($_POST['email'] ?? '');
+            $password = $_POST['password'] ?? '';
+            
+            $role = 'admin'; 
+
+            if ($nom && $email && $password) {
+                $this->model->create($nom, $email, $password, $role);
+                header('Location: index.php?page=login');
+                exit;
+            }
+            $error = 'Tous les champs sont requis 🐰.';
+        }
+
+        require_once __DIR__ . '/../View/UserView.php';
+        (new UserView())->showRegister($error);
     }
 }

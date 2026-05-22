@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/../Model/LivraisonsModel.php';
 require_once __DIR__ . '/../Model/LapinModel.php';
-require_once __DIR__ . '/../Model/ZoneJardinModel.php';
+require_once __DIR__ . '/../Model/ZoneModel.php';
+require_once __DIR__ . '/../Model/JardinModel.php';
 require_once __DIR__ . '/../View/LivraisonsView.php';
 require_once __DIR__ . '/../Controller/UserController.php';
 
@@ -31,17 +32,20 @@ class LivraisonsController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $datePrev = $_POST['date_prev'] ?? '';
             $idLapin  = (int)($_POST['id_lapin'] ?? 0);
-            $idJardin = (int)($_POST['id_jardin'] ?? 0);
+            $idJardin = (int)($_POST['id_zone'] ?? 0);
+            $idUtilisateur = (int)($_SESSION['user_id'] ?? 0);
             if ($datePrev && $idLapin && $idJardin) {
-                $this->model->create($datePrev, $idLapin, $idJardin);
+                $this->livraisonsModel->create($datePrev, $idLapin, $idZone, $idUtilisateur);
                 header('Location: index.php?page=livraisons&success=1');
                 exit;
             }
             $error = 'Tous les champs sont requis.';
         }
-        $lapins  = (new LapinModel())->getAll();
-        $jardins = (new JardinModel())->getAll();
-        (new LivraisonsView())->showCreate($error, $lapins, $jardins);
+        $zoneModel = new ZoneModel();
+        $zones = $zoneModel->getAll();
+        $lapinsModel = new LapinModel();
+        $lapins = $lapinsModel->getAll();
+        (new LivraisonsView())->showCreate($error, $lapins, $zones);
     }
 
     public function handleEdit(): void

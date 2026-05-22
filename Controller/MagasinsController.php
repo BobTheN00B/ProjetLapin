@@ -23,13 +23,14 @@ class MagasinsController
 
     public function handleCreate(): void
     {
-        $this->auth->requireAdmin();
+        $this->auth->requireAuth();
         $error = null;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nom     = trim($_POST['nom'] ?? '');
             $adresse = trim($_POST['adresse'] ?? '');
-            if ($nom) {
-                $this->model->create($nom, $adresse);
+            $idUtilisateur = (int)($_SESSION['user_id'] ?? '');
+            if ($nom && $idUtilisateur > 0) {
+                $this->magasinsModel->create($nom, $adresse, $idUtilisateur);
                 header('Location: index.php?page=magasins&success=1');
                 exit;
             }
@@ -40,7 +41,7 @@ class MagasinsController
 
     public function handleEdit(): void
     {
-        $this->auth->requireAdmin();
+        $this->auth->requireAuth();
         $id  = (int)($_GET['id'] ?? 0);
         $mag = $this->model->getById($id);
         if (!$mag) { header('Location: index.php?page=magasins'); exit; }

@@ -15,7 +15,7 @@ class CollecteModel
         return $this->db->query(
             'SELECT c.*, m.Nom AS NomMagasin
              FROM Collecte c
-             JOIN Magasins m ON c.Id_Magasins=m.Id_Magasins
+             JOIN Magasins m ON Id_Magasins=m.Id_Magasins
              ORDER BY c.datePrevisionnelle DESC'
         )->fetchAll();
     }

@@ -3,6 +3,52 @@ require_once __DIR__ . '/layout.php';
 
 class UserView
 {
+
+    public function showRegister(?string $error): void
+    {
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Créer un compte – 🐰 Lapin de Pâques</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="User">
+    <div class="login-box">
+    <span class="emoji">🥕</span>
+    <h1>Bienvenue !</h1>
+    <p class="sub">Créez votre premier compte administrateur</p>
+    <?php if ($error): ?>
+      <div class="error"><?= htmlspecialchars($error) ?></div>
+    <?php endif; ?>
+    <form method="POST">
+      <div class="form-group">
+        <label>Nom de votre lapin</label>
+        <input type="text" name="nom" required placeholder="Bugs Bunny">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" required placeholder="lapin@paques.fr">
+      </div>
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input type="password" name="password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn-login">🐾 Créer mon compte</button>
+    </form>
+    <p style="text-align: center; margin-top: 15px;">
+        <a href="index.php?page=login" style="color: #FF6B8A; text-decoration: none; font-weight: bold; font-family: 'Nunito', sans-serif;">Déjà un compte ? Se connecter</a>
+    </p>
+    </div>
+  </div>
+</body>
+</html>
+<?php
+    }
+    
     public function showLogin(?string $error): void
     {
 ?>
@@ -152,7 +198,6 @@ class UserView
     <td><?= htmlspecialchars($u['Nom']) ?></td>
     <td><?= htmlspecialchars($u['Email']) ?></td>
     <td><span class="badge <?= $u['Role']==='admin'?'badge-red':'badge-blue' ?>"><?= $u['Role'] ?></span></td>
-    <td><?= $u['CreatedAt'] ?></td>
     <td>
       <a href="index.php?page=utilisateurs_delete&id=<?= $u['Id_Utilisateurs'] ?>"
          class="btn btn-danger btn-sm"
